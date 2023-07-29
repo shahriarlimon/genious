@@ -7,6 +7,7 @@ import Link from 'next/link';
 import React from 'react';
 import { usePathname } from "next/navigation";
 import { Code, ImageIcon, LayoutDashboard, MessageSquare, Music, Settings, VideoIcon } from "lucide-react";
+import FreeCounter from './FreeCounter';
 
 const montserrat = Montserrat({
     weight: "600",
@@ -56,12 +57,15 @@ const routes = [
         href: '/settings',
     },
 ];
+interface SidebarProps {
+    apiLimitCount: number
+}
 
-const Sidebar = () => {
+const Sidebar = ({ apiLimitCount = 0 }: SidebarProps) => {
     const pathname = usePathname();
 
     return (
-        <div className='space-y-4 py-4 flex flex-col h-full bg-[#111827] text-white'>
+        <div className='space-y-4 py-4 flex flex-col h-full bg-[#111827] text-white overflow-y-auto'>
             <div className='px-3 py-2 flex-1'>
                 <Link className='flex items-center pl-3 mb-14' href={"/"}>
                     <div className='relative w-8 h-8 mr-4'>
@@ -82,6 +86,7 @@ const Sidebar = () => {
                 </div>
 
             </div>
+            <FreeCounter apiLimitCount={apiLimitCount} />
 
         </div>
     );

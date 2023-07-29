@@ -4,7 +4,7 @@ import { Heading } from '@/components/heading';
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
 import React, { useState } from 'react';
-import {  VideoIcon } from "lucide-react";
+import { VideoIcon } from "lucide-react";
 import { formSchema } from './constants';
 import { FormControl, FormField, FormItem, Form } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -13,8 +13,9 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation';
 import { Loader } from '@/components/loader';
 import { Empty } from '@/components/empty';
+import { useProModal } from '@/hooks/useProModal';
 const VideoPage = () => {
-
+    const proModal = useProModal()
     const router = useRouter()
     const [video, setVideo] = useState<string>()
     const form = useForm<z.infer<typeof formSchema>>({
@@ -32,7 +33,10 @@ const VideoPage = () => {
             setVideo(response.data[0])
             form.reset()
         } catch (error: any) {
-            console.log(error)
+
+            if (error?.response?.status === 403) {
+                proModal.onOpen()
+            }
         } finally {
             router.refresh()
         }
